@@ -80,27 +80,14 @@ public class Button extends Message {
         }
     }
 
-    public static class Out extends Button {
-        public Out(int behaviour, int identifier, int data) throws InvalidMessageException {
-            super(behaviour, identifier, data);
+    public static class Out {
+        public static Button createPadData(int behaviour, int localIdentifier, int colour) throws InvalidMessageException {
+            return new Button(behaviour, ButtonType.PAD, localIdentifier, colour);
         }
 
-        public Out(int behaviour, ButtonType type, int localIdentifier, int data) throws InvalidMessageException {
-            super(behaviour, type, localIdentifier, data);
-        }
-
-        public static Out createPadData(int behaviour, int localIdentifier, int colour) throws InvalidMessageException {
-            return new Out(behaviour, ButtonType.PAD, localIdentifier, colour);
-        }
-
-        public static Out createUIButtonData(ButtonType type, int localIdentifier, int behaviour) throws InvalidMessageException {
+        public static Button createUIButtonData(ButtonType type, int localIdentifier, int behaviour) throws InvalidMessageException {
             if (type == ButtonType.PAD) throw new InvalidMessageException();
-            return new Out(0x90, type, localIdentifier, behaviour);
-        }
-
-        @Override
-        public String toString() {
-            return "OUT: " + super.toString() + (getButtonType().equals(ButtonType.PAD) ? " | " + getBehaviour() : "");
+            return new Button(0x90, type, localIdentifier, behaviour);
         }
     }
 }

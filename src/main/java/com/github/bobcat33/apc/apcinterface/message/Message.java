@@ -7,9 +7,9 @@ import javax.sound.midi.ShortMessage;
 public class Message {
     private final int channel, identifier, data;
     public Message(int channel, int identifier, int data) throws InvalidMessageException {
-        if (channel < 0 || channel > 127) throw new InvalidMessageException("Channel out of bounds (" + channel + ")");
-        if (identifier < 0 || identifier > 127) throw new InvalidMessageException("Identifier out of bounds (" + identifier + ")");
-        if (data < 0 || data > 127) throw new InvalidMessageException("Data out of bounds (" + data + ")");
+//        if (channel < 0 || channel > 127) throw new InvalidMessageException("Channel out of bounds (" + channel + ")");
+//        if (identifier < 0 || identifier > 127) throw new InvalidMessageException("Identifier out of bounds (" + identifier + ")");
+//        if (data < 0 || data > 127) throw new InvalidMessageException("Data out of bounds (" + data + ")");
 
         this.channel = channel;
         this.identifier = identifier;

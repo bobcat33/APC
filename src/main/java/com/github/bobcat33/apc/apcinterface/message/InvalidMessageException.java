@@ -1,6 +1,6 @@
 package com.github.bobcat33.apc.apcinterface.message;
 
-public class InvalidMessageException extends Exception {
+public class InvalidMessageException extends RuntimeException {
     public InvalidMessageException() {
         super("Invalid message parameters");
     }

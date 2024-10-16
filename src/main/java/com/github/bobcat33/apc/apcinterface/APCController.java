@@ -24,9 +24,10 @@ public class APCController implements Receiver {
         listeners.add(listener);
     }
 
-    public void removeListener(APCEventListener listener) {
-        listeners.remove(listener);
-    }
+    // Currently causes ConcurrentModificationException
+//    public void removeListener(APCEventListener listener) {
+//        listeners.remove(listener);
+//    }
 
     public ArrayList<APCEventListener> getListeners() {
         return listeners;
@@ -46,10 +47,15 @@ public class APCController implements Receiver {
         }
     }
 
-    public void output(Message message) throws MidiUnavailableException, InvalidMidiDataException {
+    public void output(Message message) {
         if (!isActive()) return;
 
-        outputStream.getReceiver().send(message.toShortMessage(), -1);
+        try {
+            outputStream.getReceiver().send(message.toShortMessage(), -1);
+        } catch (InvalidMidiDataException | MidiUnavailableException e) {
+            throw new RuntimeException(e);
+        }
+
         System.out.println(message);
     }
 
@@ -97,6 +103,7 @@ public class APCController implements Receiver {
         this.active = false;
 
         for (APCEventListener listener : listeners) listener.onClose();
+        System.out.println("APCController Closed!");
     }
 
     public boolean isActive() {
