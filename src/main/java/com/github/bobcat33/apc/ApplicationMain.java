@@ -25,26 +25,29 @@ public class ApplicationMain extends Application {
         APCController ctrl = MidiDeviceManager.createAPCController(6, 4);
         ctrl.start();
 
-        new StartupAnimation(ctrl).start();
+//        new StartupAnimation(ctrl).start();
 
-        ctrl.addListener(new APCButtonEventListener() {
-            boolean triggered = false;
-            @Override
-            public void onButtonDown(APCController controller, Button button) {
-                if (button.getButtonType().equals(ButtonType.SHIFT)) {
-                    controller.close();
-                    return;
-                }
-                try{
-                    new SpreadFromPointAnimation(controller, new Random().nextInt(127)).start(button);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            @Override
-            public void onButtonUp(APCController controller, Button button) {}
-            @Override
-            public void onClose() {}
-        });
+
+
+//        ctrl.addListener(new APCButtonEventListener() {
+//            boolean triggered = false;
+//            @Override
+//            public void onButtonDown(APCController controller, Button button) {
+//                if (button.getButtonType().equals(ButtonType.SHIFT)) {
+//                    controller.close();
+//                    return;
+//                }
+//                try{
+//                    new SpreadFromPointAnimation(controller, 0).start(button);
+////                    new SpreadFromPointAnimation(controller, new Random().nextInt(127)).start(button);
+//                } catch (Exception e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//            @Override
+//            public void onButtonUp(APCController controller, Button button) {}
+//            @Override
+//            public void onClose() {}
+//        });
     }
 }

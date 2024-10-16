@@ -10,6 +10,6 @@ public abstract class APCFaderEventListener implements APCEventListener {
 
     @Override
     public void onMessage(APCController controller, Message message) {
-        if (Fader.isFader(message)) onFaderMove(controller, (Fader) message);
+        if (Fader.isFader(message)) onFaderMove(controller, Fader.fromMessage(message));
     }
 }

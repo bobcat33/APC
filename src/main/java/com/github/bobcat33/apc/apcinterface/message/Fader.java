@@ -11,7 +11,19 @@ public class Fader extends Message {
     }
 
     public int getFaderNum() {
-        return getIdentifier() + 1;
+        return super.getIdentifier()-47;
+    }
+
+    public int getStandardLevel() {
+        return (int) ((getData()/127d)*255);
+    }
+
+    public int getPercentage() {
+        return (int) ((getData()/127d)*100);
+    }
+
+    public static Fader fromMessage(Message message) {
+        return new Fader(message.getIdentifier(), message.getData());
     }
 
     @Override

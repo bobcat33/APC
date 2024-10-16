@@ -1,6 +1,8 @@
 package com.github.bobcat33.apc.apcinterface;
 
 import com.github.bobcat33.apc.apcinterface.listener.APCEventListener;
+import com.github.bobcat33.apc.apcinterface.message.Button;
+import com.github.bobcat33.apc.apcinterface.message.ButtonType;
 import com.github.bobcat33.apc.apcinterface.message.InvalidMessageException;
 import com.github.bobcat33.apc.apcinterface.message.Message;
 
@@ -57,6 +59,20 @@ public class APCController implements Receiver {
         }
 
         System.out.println(message);
+    }
+
+    public void outputToButton(int position, int colour) {
+        int behaviour = 0x96;
+        if (colour == 0) behaviour = 0x90;
+
+        output(new Button(behaviour, position, colour));
+    }
+
+    public void outputToButton(ButtonType type, int localPosition, int colour) {
+        int behaviour = 0x96;
+        if (colour == 0) behaviour = 0x90;
+
+        output(new Button(behaviour, type, localPosition, colour));
     }
 
     private void onReceive(Message message) {
