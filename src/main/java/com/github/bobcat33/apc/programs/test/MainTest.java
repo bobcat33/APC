@@ -1,14 +1,13 @@
 package com.github.bobcat33.apc.programs.test;
 
-import com.github.bobcat33.apc.apcinterface.message.APCColour;
+import com.github.bobcat33.apc.apcinterface.graphics.APCColour;
 
 import java.awt.*;
-import java.util.Scanner;
 
 public class MainTest {
 
     public static void main(String[] args) {
-        System.out.println(APCColour.getClosestColour(Color.decode("#4b60a3")));
+        System.out.println(APCColour.getClosestColour(Color.decode("#451c31")));
     }
 
    /* public static void main(String[] args) {

@@ -1,15 +1,15 @@
-package com.github.bobcat33.apc.programs.faderlevels;
+package com.github.bobcat33.apc.programs.colourpicker;
 
 import com.github.bobcat33.apc.apcinterface.APCController;
+import com.github.bobcat33.apc.apcinterface.message.Fader;
 
-public class AnimateButtons {
+public class FaderGraphics {
 
-    public static void animateColumn(APCController ctrl, int column, int value) {
-        if (column > 7) column = 7; // TODO Make master (8) increase and decrease all columns
-        if (column < 0) column = 0;
-        if (value > 127) value = 127;
+    public static void updateColumn(APCController ctrl, Fader fader) {
+        if (fader.getFaderNum() < 1 || fader.getFaderNum() > 3) return;
+        int column = fader.getFaderNum() - 1;
+        int value = fader.getData();
         int distance = value / 16;
-        System.out.println("DISTANCE: " + distance);
 
         for (int i = 0; i <= 7; i++) {
             int colour = 0;

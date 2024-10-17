@@ -1,4 +1,4 @@
-package com.github.bobcat33.apc.animation;
+package com.github.bobcat33.apc.animations;
 
 import com.github.bobcat33.apc.apcinterface.APCController;
 import com.github.bobcat33.apc.apcinterface.message.Button;

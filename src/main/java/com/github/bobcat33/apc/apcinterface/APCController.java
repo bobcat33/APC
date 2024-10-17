@@ -1,5 +1,6 @@
 package com.github.bobcat33.apc.apcinterface;
 
+import com.github.bobcat33.apc.apcinterface.graphics.UIButtonBehaviour;
 import com.github.bobcat33.apc.apcinterface.listener.APCEventListener;
 import com.github.bobcat33.apc.apcinterface.message.Button;
 import com.github.bobcat33.apc.apcinterface.message.ButtonType;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 public class APCController implements Receiver {
     private final MidiDevice inputStream, outputStream;
     private boolean active, closed;
+
+    private boolean logs = false;
     private ArrayList<APCEventListener> listeners = new ArrayList<>();
 
     public APCController(MidiDevice inputStream, MidiDevice outputStream) throws MidiUnavailableException {
@@ -58,8 +61,11 @@ public class APCController implements Receiver {
             throw new RuntimeException(e);
         }
 
-        System.out.println(message);
+        if (logs) System.out.println(message);
     }
+
+    public void enableLogs() {logs = true;}
+    public void disableLogs() {logs = false;}
 
     public void outputToButton(int position, int colour) {
         int behaviour = 0x96;
@@ -69,10 +75,16 @@ public class APCController implements Receiver {
     }
 
     public void outputToButton(ButtonType type, int localPosition, int colour) {
-        int behaviour = 0x96;
-        if (colour == 0) behaviour = 0x90;
+        int behaviour;
+        if (type.equals(ButtonType.PAD) && colour != 0) behaviour = 0x96;
+        else behaviour = 0x90;
 
         output(new Button(behaviour, type, localPosition, colour));
+    }
+
+    public void outputToButton(ButtonType type, int localPosition, UIButtonBehaviour behaviour) {
+        if (type.equals(ButtonType.PAD)) throw new RuntimeException("UIButtonBehaviour cannot be applied to button of type PAD"); // TODO make exception
+        outputToButton(type, localPosition, behaviour.ordinal());
     }
 
     private void onReceive(Message message) {
@@ -119,7 +131,7 @@ public class APCController implements Receiver {
         this.active = false;
 
         for (APCEventListener listener : listeners) listener.onClose();
-        System.out.println("APCController Closed!");
+        if (logs) System.out.println("APCController Closed!");
     }
 
     public boolean isActive() {
