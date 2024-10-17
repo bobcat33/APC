@@ -100,22 +100,6 @@ public class APCController implements Receiver {
         } catch (InvalidMessageException e) {
             throw new RuntimeException(e);
         }
-/*
-        // Want to make LED XX colour on 100% brightness
-        // Channel 96 for 100%
-        // Note is the same as the received message
-        // Velocity colour variable
-
-        ShortMessage msg = new ShortMessage();
-        try {
-            msg.setMessage(0x96, message.getMessage()[1], new Random().nextInt(127));
-//            msg.setMessage(0x96, message.getMessage()[1], colour);
-            output(msg);
-        } catch (InvalidMidiDataException err) {
-            System.out.println("Unable to send message as MIDI data is invalid: " + err.getMessage());
-        } catch (MidiUnavailableException err) {
-            System.out.println("Unable to send message as MIDI is unavailable: " + err.getMessage());
-        }*/
     }
 
     @Override

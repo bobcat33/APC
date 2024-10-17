@@ -1,11 +1,13 @@
 package com.github.bobcat33.apc.programs.colourpicker;
 
 import com.github.bobcat33.apc.apcinterface.APCController;
+import com.github.bobcat33.apc.apcinterface.graphics.APCColour;
 import com.github.bobcat33.apc.apcinterface.listener.APCButtonFaderEventListener;
 import com.github.bobcat33.apc.apcinterface.message.Button;
 import com.github.bobcat33.apc.apcinterface.message.ButtonType;
 import com.github.bobcat33.apc.apcinterface.message.Fader;
 
+import java.awt.*;
 import java.util.HashMap;
 
 public class InputListener extends APCButtonFaderEventListener {
@@ -47,16 +49,31 @@ public class InputListener extends APCButtonFaderEventListener {
 //        else if (button.getButtonType())
 
         switch (button.getButtonType()) {
-            case SCENE_LAUNCH -> sceneChange(controller, button);
+            case SCENE_LAUNCH -> changeScene(controller, button);
             case PAD -> {
                 if (currentScene.equals(Scene.COLOURS_1) || currentScene.equals(Scene.COLOURS_2)) selectColour(button);
             }
+            case TRACK -> pressTrackButton(controller, button);
         }
 
     }
 
-    private void sceneChange(APCController ctrl, Button sceneButton) {
-        if (sceneButton.getLocalIdentifier() != 3) new SceneButtonsLayout(sceneButton).go(ctrl);
+    private void pressTrackButton(APCController ctrl, Button trackButton) {
+        switch (trackButton.getLocalIdentifier()) {
+            case 0,1,2 -> {
+                if (currentScene.equals(Scene.FADERS)) {
+                    FaderGraphics.updateSolidColour(ctrl, faderRed, faderGreen, faderBlue);
+                }
+            }
+            case 7 -> {
+                // TODO SELECT MODE BUTTON
+            }
+            default -> {}
+        }
+    }
+
+    private void changeScene(APCController ctrl, Button sceneButton) {
+        if (sceneButton.getLocalIdentifier() != 3) SceneButtonsLayout.go(ctrl, sceneButton);
         switch (sceneButton.getLocalIdentifier()) {
             case 0 -> switchToScene(ctrl, Scene.COLOURS_1);
             case 1 -> switchToScene(ctrl, Scene.COLOURS_2);
@@ -73,6 +90,7 @@ public class InputListener extends APCButtonFaderEventListener {
 
         switch (scene) {
             case COLOURS_1, COLOURS_2 -> ColourPages.go(ctrl, scene.ordinal());
+            case FADERS -> FaderGraphics.buildBase(ctrl, faderRed, faderGreen, faderBlue);
         }
     }
 
@@ -101,9 +119,15 @@ public class InputListener extends APCButtonFaderEventListener {
     @Override
     public void onFaderMove(APCController controller, Fader fader) {
         switch (fader.getFaderNum()) {
-            case 1 -> faderRed = fader.getStandardLevel();
-            case 2 -> faderGreen = fader.getStandardLevel();
-            case 3 -> faderBlue = fader.getStandardLevel();
+            case 1,2,3 -> {
+                if (currentScene.equals(Scene.FADERS)) FaderGraphics.updateColumn(controller, fader);
+                FaderGraphics.updateTrackBlink(controller, true);
+                switch (fader.getFaderNum()) {
+                    case 1 -> faderRed = fader.getStandardLevel();
+                    case 2 -> faderGreen = fader.getStandardLevel();
+                    case 3 -> faderBlue = fader.getStandardLevel();
+                }
+            }
         }
     }
 
