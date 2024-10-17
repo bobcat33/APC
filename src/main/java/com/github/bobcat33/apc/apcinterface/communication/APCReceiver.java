@@ -36,7 +36,7 @@ public class APCReceiver implements Receiver {
     }
 
     private void onReceive(Message message) {
-        if (logging) System.out.println("IN: " + message);
+        if (logging) System.out.println(Thread.currentThread().threadId() + "\tIN: " + message);
         for (APCEventListener listener : listeners) listener.onMessage(parentController, message);
     }
 
@@ -45,7 +45,7 @@ public class APCReceiver implements Receiver {
         if (!isActive()) return;
 
         try {
-            onReceive(Message.fromMIDIMessage(message));
+            new Thread(() -> onReceive(Message.fromMIDIMessage(message))).start();
         } catch (InvalidMessageException e) {
             throw new RuntimeException(e);
         }

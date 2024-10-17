@@ -13,9 +13,9 @@ public class APCTransmitter implements Transmitter {
 
     public void transmit(Message message) throws InvalidMidiDataException {
         if (!active) return;
-        if (logging) System.out.println("SENDING: " + message);
+        if (logging) System.out.println(Thread.currentThread().threadId() + "\tSENDING: " + message);
         if (outputStream != null) outputStream.send(message.toShortMessage(), -1);
-        if (logging) System.out.println("SENT:    " + message);
+        if (logging) System.out.println(Thread.currentThread().threadId() + "\tSENT:    " + message);
     }
 
     public void setLogging(boolean logging) {
