@@ -1,7 +1,6 @@
 package com.github.bobcat33.apc.programs.colourpicker;
 
 import com.github.bobcat33.apc.apcinterface.APCController;
-import com.github.bobcat33.apc.apcinterface.graphics.APCColour;
 import com.github.bobcat33.apc.apcinterface.listener.APCButtonFaderEventListener;
 import com.github.bobcat33.apc.apcinterface.message.Button;
 import com.github.bobcat33.apc.apcinterface.message.ButtonType;
@@ -11,11 +10,11 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class InputListener extends APCButtonFaderEventListener {
-    private int selectedColour = 0, faderRed = 0, faderGreen = 0, faderBlue = 0;
-    private ButtonMode currentMode = ButtonMode.VIEW_STORED;
+    private volatile int selectedColour = 0, faderRed = 0, faderGreen = 0, faderBlue = 0;
+//    private ButtonMode currentMode = ButtonMode.VIEW_STORED;
 
-    private Scene currentScene = Scene.COLOURS_1;
-    private HashMap<Integer, Integer> stored = new HashMap();
+    private volatile Scene currentScene = Scene.COLOURS_1;
+//    private HashMap<Integer, Integer> stored = new HashMap();
     private enum Scene {
         COLOURS_1,
         COLOURS_2,

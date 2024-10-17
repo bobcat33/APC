@@ -9,6 +9,7 @@ import com.github.bobcat33.apc.apcinterface.message.Fader;
 import java.awt.*;
 
 public class FaderGraphics {
+    private static volatile boolean trackBlinking = false;
 
     public static void buildBase(APCController ctrl, int red, int green, int blue) {
         int colour = APCColour.getClosestColour(new Color(red, green, blue));
@@ -44,6 +45,8 @@ public class FaderGraphics {
     }
 
     public static void updateTrackBlink(APCController ctrl, boolean blink) {
+        if (blink == trackBlinking) return;
+        trackBlinking = blink;
         UIButtonBehaviour behaviour = (blink) ? UIButtonBehaviour.BLINK : UIButtonBehaviour.ON;
 
         ctrl.outputToButton(ButtonType.TRACK, 0, behaviour);

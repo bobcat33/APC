@@ -1,36 +1,34 @@
-package com.github.bobcat33.apc.apcinterface.listener;
+package com.github.bobcat33.apc.apcinterface.communication;
 
 import com.github.bobcat33.apc.apcinterface.APCController;
+import com.github.bobcat33.apc.apcinterface.listener.APCEventListener;
 import com.github.bobcat33.apc.apcinterface.message.InvalidMessageException;
 import com.github.bobcat33.apc.apcinterface.message.Message;
 
-import javax.sound.midi.MidiDevice;
-import javax.sound.midi.MidiMessage;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Receiver;
+import javax.sound.midi.*;
 import java.util.ArrayList;
 
-public class APCListener implements Receiver {
+public class APCReceiver implements Receiver {
     private final APCController parentController;
     private final ArrayList<APCEventListener> listeners = new ArrayList<>();
-    private final MidiDevice inputStream;
+    private final Transmitter inputStream;
     private boolean active, closed;
-    private boolean logs = false;
+    private boolean logging = false;
 
-    public APCListener(APCController parent, MidiDevice inputStream) {
+    public APCReceiver(APCController parent, Transmitter transmitter) {
         this.parentController = parent;
-        this.inputStream = inputStream;
+        this.inputStream = transmitter;
     }
 
-    public void start() throws MidiUnavailableException {
+    public void start() {
         if (closed || active) return;
-        this.inputStream.getTransmitter().setReceiver(this);
+        this.inputStream.setReceiver(this);
         this.active = true;
-        if (logs) System.out.println("APCListener Started");
+        if (logging) System.out.println("APCListener Started");
     }
 
     public void setLogging(boolean logging) {
-        this.logs = logging;
+        this.logging = logging;
     }
 
     public void addListener(APCEventListener listener) {
@@ -38,7 +36,7 @@ public class APCListener implements Receiver {
     }
 
     private void onReceive(Message message) {
-        if (logs) System.out.println("IN: " + message);
+        if (logging) System.out.println("IN: " + message);
         for (APCEventListener listener : listeners) listener.onMessage(parentController, message);
     }
 
@@ -57,16 +55,12 @@ public class APCListener implements Receiver {
     public void close() {
         if (!isActive()) return;
         this.closed = true;
-        try {
-            inputStream.getTransmitter().setReceiver(null);
-        } catch (MidiUnavailableException e) {
-            throw new RuntimeException(e);
-        }
+        inputStream.setReceiver(null);
         inputStream.close();
         for (APCEventListener listener : listeners) listener.onClose();
         this.active = false;
 
-        if (logs) System.out.println("APCListener Closed!");
+        if (logging) System.out.println("APCListener Closed!");
     }
 
     public boolean isActive() {

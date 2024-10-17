@@ -16,4 +16,6 @@ module com.github.bobcat33.apcinterface {
     opens com.github.bobcat33.apc.listeners to javafx.fxml;
     exports com.github.bobcat33.apc.apcinterface.graphics;
     opens com.github.bobcat33.apc.apcinterface.graphics to javafx.fxml;
+    exports com.github.bobcat33.apc.apcinterface.communication;
+    opens com.github.bobcat33.apc.apcinterface.communication to javafx.fxml;
 }

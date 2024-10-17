@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) throws MidiUnavailableException {
         APCController ctrl = MidiDeviceManager.createAPCController(6, 4);
-        ctrl.enableLogs();
+        ctrl.enableLogging();
         ctrl.addListener(new ShiftStopListener(true));
         ctrl.addListener(new InputListener());
         ctrl.start();

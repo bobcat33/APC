@@ -1,38 +1,43 @@
 package com.github.bobcat33.apc.apcinterface;
 
+import com.github.bobcat33.apc.apcinterface.communication.APCTransmitter;
 import com.github.bobcat33.apc.apcinterface.graphics.UIButtonBehaviour;
 import com.github.bobcat33.apc.apcinterface.listener.APCEventListener;
-import com.github.bobcat33.apc.apcinterface.listener.APCListener;
+import com.github.bobcat33.apc.apcinterface.communication.APCReceiver;
 import com.github.bobcat33.apc.apcinterface.message.Button;
 import com.github.bobcat33.apc.apcinterface.message.ButtonType;
 import com.github.bobcat33.apc.apcinterface.message.Message;
 
 import javax.sound.midi.*;
 
-public class APCController implements AutoCloseable {
-    private final MidiDevice outputStream;
-    private final APCListener inputStream;
+public class APCController {
+    private final MidiDevice outputStream, inputStream;
+    private final APCReceiver receiver;
+    private final APCTransmitter transmitter;
 
     private boolean active, closed;
-    private boolean logs = false;
+    private boolean logging = false;
 
     public APCController(MidiDevice inputStream, MidiDevice outputStream) throws MidiUnavailableException {
         openDevice(inputStream);
         openDevice(outputStream);
 
-        this.inputStream = new APCListener(this, inputStream);
+        this.inputStream = inputStream;
         this.outputStream = outputStream;
+        receiver = new APCReceiver(this, inputStream.getTransmitter());
+        transmitter = new APCTransmitter();
     }
 
     public void addListener(APCEventListener listener) {
-        inputStream.addListener(listener);
+        receiver.addListener(listener);
     }
 
     public void start() throws MidiUnavailableException {
         if (closed || active) return;
-        this.inputStream.start();
-        this.active = true;
-        if (logs) System.out.println("APCController Started");
+        receiver.start();
+        transmitter.setReceiver(outputStream.getReceiver());
+        active = true;
+        if (logging) System.out.println("APCController Started");
     }
 
     private void openDevice(MidiDevice device) throws MidiUnavailableException {
@@ -47,22 +52,25 @@ public class APCController implements AutoCloseable {
         if (!isActive()) return;
 
         try {
-            outputStream.getReceiver().send(message.toShortMessage(), -1);
-        } catch (InvalidMidiDataException | MidiUnavailableException e) {
+            transmitter.transmit(message);
+        } catch (InvalidMidiDataException e) {
             throw new RuntimeException(e);
         }
-
-        if (logs) System.out.println("OUT: " + message);
     }
 
-    public void enableLogs() {
-        logs = true;
-        inputStream.setLogging(true);
+    public void enableLogging() {
+        setLogging(true, true, true);
     }
-    public void disableLogs() {
-        logs = false;
-        inputStream.setLogging(false);
+    public void disableLogging() {
+        setLogging(false, false, false);
     }
+
+    public void setLogging(boolean controller, boolean transmitter, boolean receiver) {
+        logging = controller;
+        this.transmitter.setLogging(transmitter);
+        this.receiver.setLogging(receiver);
+    }
+
 
     public void outputToButton(int position, int colour) {
         int behaviour = 0x96;
@@ -84,15 +92,15 @@ public class APCController implements AutoCloseable {
         outputToButton(type, localPosition, behaviour.ordinal());
     }
 
-    @Override
     public void close() {
         if (!isActive()) return;
         this.closed = true;
+        receiver.close();
+        transmitter.close();
         inputStream.close();
         outputStream.close();
         this.active = false;
-
-        if (logs) System.out.println("APCController Closed!");
+        if (logging) System.out.println("APCController Closed!");
     }
 
     public boolean isActive() {
