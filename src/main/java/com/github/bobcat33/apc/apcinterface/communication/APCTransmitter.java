@@ -7,7 +7,7 @@ import javax.sound.midi.Receiver;
 import javax.sound.midi.Transmitter;
 
 public class APCTransmitter implements Transmitter {
-    private Receiver outputStream;
+    private volatile Receiver outputStream;
     private boolean logging = false;
     private boolean active = true;
 

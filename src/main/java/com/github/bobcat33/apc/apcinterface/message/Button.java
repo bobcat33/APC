@@ -33,6 +33,30 @@ public class Button extends Message {
         return getButtonType(getIdentifier());
     }
 
+    public Button at(int identifier) {
+        return new Button(getBehaviour(), getButtonType(), identifier, getData());
+    }
+
+    public Button as(ButtonType type) {
+        if (getButtonType().equals(type)) return new Button(getBehaviour(), getIdentifier(), getData());
+        if (getButtonType().equals(ButtonType.PAD)) {
+            if (getData() == 0) return new Button(0x90, type, 0, 0);
+            if (getBehaviour() <= 0x96) return new Button(0x90, type, 0, 1);
+            return new Button(0x90, type, 0, 2);
+        }
+        if (type.equals(ButtonType.PAD)) {
+            if (getData() == 0) return new Button(0x90, 0, 0);
+            int colour = (getButtonType().equals(ButtonType.SCENE_LAUNCH)) ? 21 : 5; // Green if scene launch is copied, red otherwise
+            if (getData() == 1) return new Button(0x96, 0, colour);
+            return new Button(0x9F, 0, colour); // Blinking 1/2
+        }
+        return new Button(getBehaviour(), type, 0, getData());
+    }
+
+    public Button copy() {
+        return new Button(getBehaviour(), getIdentifier(), getData());
+    }
+
     public static boolean isButton(Message message) {
         return message.getChannel() != -80;
     }

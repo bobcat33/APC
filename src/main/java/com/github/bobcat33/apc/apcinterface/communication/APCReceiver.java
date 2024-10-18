@@ -45,6 +45,7 @@ public class APCReceiver implements Receiver {
         if (!isActive()) return;
 
         try {
+            // Run all received messages on a new thread to avoid blocking
             new Thread(() -> onReceive(Message.fromMIDIMessage(message))).start();
         } catch (InvalidMessageException e) {
             throw new RuntimeException(e);

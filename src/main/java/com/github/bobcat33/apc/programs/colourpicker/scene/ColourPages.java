@@ -1,4 +1,4 @@
-package com.github.bobcat33.apc.programs.colourpicker;
+package com.github.bobcat33.apc.programs.colourpicker.scene;
 
 import com.github.bobcat33.apc.apcinterface.APCController;
 import com.github.bobcat33.apc.apcinterface.graphics.UIButtonBehaviour;
@@ -13,10 +13,10 @@ public class ColourPages {
             ctrl.outputToButton(i, i+(64*page));
         }
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
             ctrl.outputToButton(ButtonType.TRACK, i, UIButtonBehaviour.OFF);
         }
 
-        ctrl.outputToButton(ButtonType.TRACK, 7, UIButtonBehaviour.ON); // Select button (view value of any colour)
+//        ctrl.outputToButton(ButtonType.TRACK, 7, UIButtonBehaviour.ON); // Select button (view value of any colour)
     }
 }

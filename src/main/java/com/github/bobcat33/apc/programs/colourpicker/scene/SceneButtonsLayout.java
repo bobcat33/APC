@@ -1,4 +1,4 @@
-package com.github.bobcat33.apc.programs.colourpicker;
+package com.github.bobcat33.apc.programs.colourpicker.scene;
 
 import com.github.bobcat33.apc.apcinterface.APCController;
 import com.github.bobcat33.apc.apcinterface.graphics.UIButtonBehaviour;

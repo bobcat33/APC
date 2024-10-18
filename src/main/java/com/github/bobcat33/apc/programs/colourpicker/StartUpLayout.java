@@ -4,6 +4,7 @@ import com.github.bobcat33.apc.apcinterface.APCController;
 import com.github.bobcat33.apc.apcinterface.graphics.UIButtonBehaviour;
 import com.github.bobcat33.apc.apcinterface.layout.Layout;
 import com.github.bobcat33.apc.apcinterface.message.ButtonType;
+import com.github.bobcat33.apc.programs.colourpicker.scene.ColourPages;
 
 public class StartUpLayout implements Layout {
     @Override

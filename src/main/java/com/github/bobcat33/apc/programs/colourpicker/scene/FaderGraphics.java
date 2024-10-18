@@ -1,4 +1,4 @@
-package com.github.bobcat33.apc.programs.colourpicker;
+package com.github.bobcat33.apc.programs.colourpicker.scene;
 
 import com.github.bobcat33.apc.apcinterface.APCController;
 import com.github.bobcat33.apc.apcinterface.graphics.APCColour;
@@ -10,10 +10,17 @@ import java.awt.*;
 
 public class FaderGraphics {
     private static volatile boolean trackBlinking = false;
+    private static volatile int currentColour = 0;
+
+    public static int getCurrentColour() {
+        return currentColour;
+    }
 
     public static void buildBase(APCController ctrl, int red, int green, int blue) {
         int colour = APCColour.getClosestColour(new Color(red, green, blue));
+        currentColour = colour;
         updateColumns(ctrl, red, green, blue);
+        trackBlinking = false;
 
         for (int i = 0; i < 8; i++) {
             ctrl.outputToButton(((8*i)+3), colour);
@@ -35,6 +42,7 @@ public class FaderGraphics {
 
     public static void updateSolidColour(APCController ctrl, int red, int green, int blue) {
         int colour = APCColour.getClosestColour(new Color(red, green, blue));
+        currentColour = colour;
 
         for (int i = 0; i < 8; i++) {
             ctrl.outputToButton(((8*i)+3), colour);
