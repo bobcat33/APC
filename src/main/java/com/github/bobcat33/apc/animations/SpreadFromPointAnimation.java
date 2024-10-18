@@ -1,34 +1,40 @@
 package com.github.bobcat33.apc.animations;
 
 import com.github.bobcat33.apc.apcinterface.APCController;
+import com.github.bobcat33.apc.apcinterface.graphics.Animation;
 import com.github.bobcat33.apc.apcinterface.message.Button;
 import com.github.bobcat33.apc.apcinterface.message.InvalidMessageException;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
 
-public class SpreadFromPointAnimation {
+public class SpreadFromPointAnimation extends Animation {
     private static final int MOVE_DELAY_MILLIS = 100;
 
-    private APCController ctrl;
-    private int behaviour, colour;
+    private final int behaviour = 0x96, colour;
+
+    private final Button button;
 
     private final ArrayList<Button> up = new ArrayList<>(), down = new ArrayList<>();
     private Button left, right;
 
-    public SpreadFromPointAnimation(APCController ctrl) {
-        this(ctrl, 0);
+    public SpreadFromPointAnimation(APCController controller) {
+        this(controller, new Button(0x90, 7, 0));
     }
 
-    public SpreadFromPointAnimation(APCController ctrl, int colour) {
-        this.ctrl = ctrl;
+    public SpreadFromPointAnimation(APCController controller, Button button) {
+        this(controller, button.getData(), button);
+    }
+
+    public SpreadFromPointAnimation(APCController ctrl, int colour, Button button) {
+        super(ctrl);
         this.colour = colour;
-        if (this.colour == 0) this.behaviour = 0x90;
-        else this.behaviour = 0x96;
+        this.button = button;
     }
 
-    public void start(Button button) throws InvalidMessageException, InterruptedException {
-        ctrl.output(Button.Out.createPadData(behaviour, button.getLocalIdentifier(), colour));
+    @Override
+    protected void start() throws InvalidMessageException {
+        controller.output(Button.Out.createPadData(behaviour, button.getLocalIdentifier(), colour));
         left = button;
         right = button;
         // Add up and down if possible
@@ -43,12 +49,12 @@ public class SpreadFromPointAnimation {
         if (left.getLocalIdentifier() % 8 != 0)
             left = Button.Out.createPadData(behaviour, left.getLocalIdentifier() - 1, colour);
         else left = null;
-        Thread.sleep(MOVE_DELAY_MILLIS);
+        sleep(MOVE_DELAY_MILLIS);
         triggerButtons();
 
 
         while (!moveButtons()) {
-            Thread.sleep(MOVE_DELAY_MILLIS);
+            sleep(MOVE_DELAY_MILLIS);
             triggerButtons();
         }
     }
@@ -103,9 +109,9 @@ public class SpreadFromPointAnimation {
     }
 
     public void triggerButtons() {
-        for (Button button : up) ctrl.output(button);
-        for (Button button : down) ctrl.output(button);
-        if (left != null) ctrl.output(left);
-        if (right != null) ctrl.output(right);
+        for (Button button : up) controller.output(button);
+        for (Button button : down) controller.output(button);
+        if (left != null) controller.output(left);
+        if (right != null) controller.output(right);
     }
 }

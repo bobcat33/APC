@@ -1,7 +1,7 @@
 package com.github.bobcat33.apc.layouts;
 
 import com.github.bobcat33.apc.apcinterface.APCController;
-import com.github.bobcat33.apc.apcinterface.layout.Layout;
+import com.github.bobcat33.apc.apcinterface.graphics.Layout;
 import com.github.bobcat33.apc.apcinterface.message.ButtonType;
 
 public class AllOff implements Layout {

@@ -9,12 +9,15 @@ import javax.sound.midi.MidiUnavailableException;
 public class Main {
     public static void main(String[] args) throws MidiUnavailableException {
         APCController ctrl = MidiDeviceManager.createAPCController(6, 4);
-//        ctrl.enableLogging();
         ctrl.addListener(new ShiftStopListener(true));
-        ctrl.addListener(new InputListener());
         ctrl.start();
 
-        new StartUpLayout().go(ctrl);
+        // Animate startup
+
+        new StartupAnimation(ctrl, controller -> {
+            controller.addListener(new InputListener());
+            new StartUpLayout().go(controller);
+        }).run();
 
     }
 

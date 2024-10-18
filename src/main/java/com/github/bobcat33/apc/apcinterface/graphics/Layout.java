@@ -1,4 +1,4 @@
-package com.github.bobcat33.apc.apcinterface.layout;
+package com.github.bobcat33.apc.apcinterface.graphics;
 
 import com.github.bobcat33.apc.apcinterface.APCController;
 
