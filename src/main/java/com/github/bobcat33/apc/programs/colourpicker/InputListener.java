@@ -80,7 +80,6 @@ public class InputListener extends APCButtonFaderEventListener {
     }
 
     private void storeButtonInUserPage(APCController ctrl, Button copiedButton, UserPage page) {
-        System.out.println();
         Button button;
         if (faderBrightness == 0) button = new Button(copiedButton.getBehaviour(), copiedButton.getIdentifier(), 0);
         else if (copiedButton.getButtonType().equals(ButtonType.PAD)) {

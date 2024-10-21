@@ -6,8 +6,6 @@ import com.github.bobcat33.apc.apcinterface.graphics.Animation;
 import com.github.bobcat33.apc.apcinterface.listener.APCButtonEventListener;
 import com.github.bobcat33.apc.apcinterface.message.Button;
 import com.github.bobcat33.apc.apcinterface.message.ButtonType;
-import com.github.bobcat33.apc.programs.colourpicker.InputListener;
-import com.github.bobcat33.apc.programs.colourpicker.StartUpLayout;
 
 import java.util.function.Consumer;
 
@@ -21,8 +19,8 @@ public class TriggerSpreadFromPoint extends APCButtonEventListener {
 
         Animation spread = new SpreadFromPointAnimation(controller, button);
         if (onFinish != null) spread.onFinish(onFinish);
-        spread.run();
         onClose();
+        spread.run();
     }
 
     @Override

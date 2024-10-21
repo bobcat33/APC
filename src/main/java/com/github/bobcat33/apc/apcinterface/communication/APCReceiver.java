@@ -32,12 +32,19 @@ public class APCReceiver implements Receiver {
     }
 
     public void addListener(APCEventListener listener) {
-        listeners.add(listener);
+        synchronized (listeners) {
+            listeners.add(listener);
+        }
     }
 
     private void onReceive(Message message) {
         if (logging) System.out.println(Thread.currentThread().threadId() + "\tIN: " + message);
-        for (APCEventListener listener : listeners) listener.onMessage(parentController, message);
+        // TODO Modify so that it doesnt have to create a million new arrays
+        ArrayList<APCEventListener> listenersCopy;
+        synchronized (listeners) {
+            listenersCopy = new ArrayList<>(listeners);
+        }
+        for (APCEventListener listener : listenersCopy) listener.onMessage(parentController, message);
     }
 
     @Override
