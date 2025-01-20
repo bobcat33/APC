@@ -1,4 +1,4 @@
-package com.github.bobcat33.apc.programs.APCToOSC;
+package com.github.bobcat33.apc.programs.apctoosc.basicshow;
 
 import com.github.bobcat33.apc.apcinterface.APCController;
 import com.github.bobcat33.apc.apcinterface.mididevice.MidiDeviceManager;
@@ -15,7 +15,7 @@ public class Main {
         ctrl.addListener(new ShiftStopListener(true));
         ctrl.start();
 
-        new ColourLayout().go(ctrl);
+        new ButtonGraphics().go(ctrl);
 
         ctrl.addListener(new InputListener(new OSCTransmitter()));
 

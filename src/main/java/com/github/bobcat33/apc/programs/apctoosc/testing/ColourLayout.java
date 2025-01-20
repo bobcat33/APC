@@ -1,4 +1,4 @@
-package com.github.bobcat33.apc.programs.APCToOSC;
+package com.github.bobcat33.apc.programs.apctoosc.testing;
 
 import com.github.bobcat33.apc.apcinterface.APCController;
 import com.github.bobcat33.apc.apcinterface.graphics.APCColour;

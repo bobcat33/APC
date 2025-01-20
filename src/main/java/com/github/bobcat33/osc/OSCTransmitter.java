@@ -21,7 +21,13 @@ public class OSCTransmitter {
         InetSocketAddress destination = new InetSocketAddress("127.0.0.1", 8000);
         InetSocketAddress source = new InetSocketAddress("127.0.0.1", 8001);
         sender = new OSCPortOut(new OSCSerializerAndParserBuilder(), destination, source, NetworkProtocol.UDP);
+        createFaderBanks();
     }
+
+    private void createFaderBanks() {
+        sendShort("/fader/1/config/10");
+    }
+
 
     /**
      * Send an OSC string to EOS
@@ -54,15 +60,27 @@ public class OSCTransmitter {
         sendShort("/chan/" + channelNum + "=" + intensity);
     }
 
+    public void sendSubLevel(int sub, double level) {
+        sendShort("/sub/" + sub + "=" + (level / 100));
+    }
 
+    public void flashSub(int sub) {
+        sendShort("/sub/" + sub + "/fire");
+    }
+
+    public void flashSubOn(int sub) {
+        sendShort("/sub/" + sub + "/fire=1.0");
+    }
+
+    public void flashSubOff(int sub) {
+        sendShort("/sub/" + sub + "/fire=0.0");
+    }
 
     public void clearCmd() {
-        System.out.println("Hi");
-        sendShort("/key/chan");
-        sendShort("/key/clear_cmdline");
+        sendShort("/key/clear_cmdline"); // TODO may have issues
     }
 
     public void setGrandMaster(double value) {
-        // TODO get this sorted
+        sendShort("/fader/1/1=" + (value / 100d));
     }
 }
