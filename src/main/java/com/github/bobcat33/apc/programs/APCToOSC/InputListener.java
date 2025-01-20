@@ -86,6 +86,12 @@ public class InputListener extends APCButtonFaderEventListener {
                             oscTransmitter.sendShort("/param/green=0");
                             oscTransmitter.sendShort("/param/blue=255");
                         }
+                        case 3 -> {
+                            oscTransmitter.sendShort("/param/red=255");
+                            oscTransmitter.sendShort("/param/green=255");
+                            oscTransmitter.sendShort("/param/blue=255");
+                            oscTransmitter.sendShort("/fx=917");
+                        }
                     }
                 }
             }
@@ -96,7 +102,7 @@ public class InputListener extends APCButtonFaderEventListener {
     public void onFaderMove(APCController controller, Fader fader) {
         if (fader.getFaderNum() == 9) oscTransmitter.setGrandMaster(fader.getPercentage());
 
-        else oscTransmitter.sendChannelIntensity(1 + fader.getFaderNum(), fader.getPercentage());
+        else oscTransmitter.sendChannelIntensity(fader.getFaderNum(), fader.getPercentage());
     }
 
     @Override
