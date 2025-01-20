@@ -90,12 +90,12 @@ public class Button extends Message {
             super(behaviour, type, localIdentifier, down ? 0 : 127);
         }
 
-        public boolean isDown() {
+        public boolean isUp() {
             return getData() == 0;
         }
 
-        public boolean isUp() {
-            return !isDown();
+        public boolean isDown() {
+            return !isUp();
         }
 
         @Override

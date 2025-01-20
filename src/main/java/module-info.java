@@ -2,6 +2,7 @@ module com.github.bobcat33.apcinterface {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
+    requires javaosc.core;
 
 
     opens com.github.bobcat33.apc to javafx.fxml;
