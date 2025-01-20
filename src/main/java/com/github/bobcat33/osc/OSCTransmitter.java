@@ -57,15 +57,12 @@ public class OSCTransmitter {
 
 
     public void clearCmd() {
+        System.out.println("Hi");
+        sendShort("/key/chan");
         sendShort("/key/clear_cmdline");
     }
 
-
-    public static void main(String[] args) throws IOException {
-        OSCTransmitter transmitter = new OSCTransmitter();
-        transmitter.sendShort("/chan/add=1.2");
-        transmitter.sendShort("/chan/add=5");
-        transmitter.sendShort("/chan/add=4");
-        transmitter.sendShort("/chan/subtract=5");
+    public void setGrandMaster(double value) {
+        // TODO get this sorted
     }
 }

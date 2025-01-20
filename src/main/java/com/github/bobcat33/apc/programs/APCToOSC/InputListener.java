@@ -12,7 +12,7 @@ public class InputListener extends APCButtonFaderEventListener {
 
     private final OSCTransmitter oscTransmitter;
     private boolean[] selected = new boolean[8];
-    private boolean selecting = false;
+    private boolean selecting = true;
 
     public InputListener(OSCTransmitter oscTransmitter) {
         this.oscTransmitter = oscTransmitter;
@@ -32,6 +32,8 @@ public class InputListener extends APCButtonFaderEventListener {
             // If the user wasn't currently selecting a new set reset the selection
             if (!selecting) {
                 resetSelection(controller);
+                return; // TODO temporary solution to issue where user selects a channel, changes colour, then if they reselect that channel it is loaded as -<channel> rather that +<channel>
+                // Temp solution requires 2 presses, 1 to clear selection and the second press to select
             }
 
             // If the channel is already selected
@@ -39,8 +41,8 @@ public class InputListener extends APCButtonFaderEventListener {
                 // Unselect on the client
                 selected[button.getLocalIdentifier()] = false;
 
-                // Correct the command line selection
-                reselect();
+                // Subtract from command line
+                oscTransmitter.sendShort("/chan=" + (button.getLocalIdentifier() + 1));
 
                 // Turn off the track button LED
                 controller.outputToButton(ButtonType.TRACK, button.getLocalIdentifier(), UIButtonBehaviour.OFF);
@@ -53,7 +55,7 @@ public class InputListener extends APCButtonFaderEventListener {
             } else {
 
                 // Add selection to command line
-                oscTransmitter.sendShort("/chan/add=" + (1 + 0.1*(button.getLocalIdentifier() + 1)));
+                oscTransmitter.sendShort("/chan=" + (button.getLocalIdentifier() + 1));
 
                 // Turn track button LED on
                 controller.outputToButton(ButtonType.TRACK, button.getLocalIdentifier(), UIButtonBehaviour.ON);
@@ -92,11 +94,9 @@ public class InputListener extends APCButtonFaderEventListener {
 
     @Override
     public void onFaderMove(APCController controller, Fader fader) {
-        double channel = 1;
+        if (fader.getFaderNum() == 9) oscTransmitter.setGrandMaster(fader.getPercentage());
 
-        if (fader.getFaderNum() != 9) channel = 1 + (0.1 * fader.getFaderNum());
-
-        oscTransmitter.sendChannelIntensity(channel, fader.getPercentage());
+        else oscTransmitter.sendChannelIntensity(1 + fader.getFaderNum(), fader.getPercentage());
     }
 
     @Override
@@ -152,7 +152,7 @@ public class InputListener extends APCButtonFaderEventListener {
         oscTransmitter.clearCmd();
         for (int i = 0; i < selected.length; i++) {
             if (selected[i]) {
-                oscTransmitter.sendShort("/chan/add=" + (1 + 0.1*(i + 1)));
+                oscTransmitter.sendShort("/chan=" + (i + 1));
             }
         }
     }
