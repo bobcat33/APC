@@ -100,9 +100,7 @@ public class InputListener extends APCButtonFaderEventListener {
 
     @Override
     public void onFaderMove(APCController controller, Fader fader) {
-        if (fader.getFaderNum() == 9) oscTransmitter.setGrandMaster(fader.getPercentage());
-
-        else oscTransmitter.sendChannelIntensity(fader.getFaderNum(), fader.getPercentage());
+        oscTransmitter.sendChannelIntensity(fader.getFaderNum(), fader.getPercentage());
     }
 
     @Override

@@ -35,8 +35,7 @@ public class InputListener extends APCButtonFaderEventListener {
 
     @Override
     public void onFaderMove(APCController controller, Fader fader) {
-        if (fader.getFaderNum() == 9) transmitter.setGrandMaster(fader.getPercentage());
-        else transmitter.sendSubLevel(fader.getFaderNum(), fader.getPercentage());
+        transmitter.sendFaderLevel(fader.getFaderNum(), fader.getPercentage());
     }
 
     @Override

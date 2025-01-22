@@ -60,8 +60,13 @@ public class OSCTransmitter {
         sendShort("/chan/" + channelNum + "=" + intensity);
     }
 
+
     public void sendSubLevel(int sub, double level) {
         sendShort("/sub/" + sub + "=" + (level / 100));
+    }
+
+    public void sendFaderLevel(int fader, double level) {
+        sendShort("/fader/1/" + fader + "=" + (level / 100d));
     }
 
     public void flashSub(int sub) {
@@ -78,9 +83,5 @@ public class OSCTransmitter {
 
     public void clearCmd() {
         sendShort("/key/clear_cmdline"); // TODO may have issues
-    }
-
-    public void setGrandMaster(double value) {
-        sendShort("/fader/1/1=" + (value / 100d));
     }
 }
