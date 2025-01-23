@@ -4,7 +4,7 @@ import com.github.bobcat33.apc.apcinterface.APCController;
 import com.github.bobcat33.apc.apcinterface.message.Fader;
 import com.github.bobcat33.apc.apcinterface.message.Message;
 
-public abstract class APCFaderEventListener implements APCEventListener {
+public abstract class APCFaderEventListener extends APCEventListener {
 
     public abstract void onFaderMove(APCController controller, Fader fader);
 

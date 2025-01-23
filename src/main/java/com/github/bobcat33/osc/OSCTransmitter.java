@@ -26,6 +26,14 @@ public class OSCTransmitter {
 
     private void createFaderBanks() {
         sendShort("/fader/1/config/10");
+        sendShort("/fader/2/config/2/10");
+        sendShort("/fader/3/config/3/10");
+        sendShort("/fader/4/config/4/10");
+        sendShort("/fader/5/config/5/10");
+        sendShort("/fader/6/config/6/10");
+        sendShort("/fader/7/config/7/10");
+        sendShort("/fader/8/config/8/10");
+        sendShort("/fader/9/config/9/10");
     }
 
 
@@ -69,6 +77,22 @@ public class OSCTransmitter {
         sendShort("/fader/1/" + fader + "=" + (level / 100d));
     }
 
+    public void flashFaderOn(int fader) {
+        flashFaderOn(1, fader);
+    }
+
+    public void flashFaderOut(int fader) {
+        flashFaderOut(1, fader);
+    }
+
+    public void flashFaderOn(int page, int fader) {
+        sendShort("/fader/" + page + "/" + fader + "/fire=1.0");
+    }
+
+    public void flashFaderOut(int page, int fader) {
+        sendShort("/fader/" + page + "/" + fader + "/fire=0.0");
+    }
+
     public void flashSub(int sub) {
         sendShort("/sub/" + sub + "/fire");
     }
@@ -83,5 +107,9 @@ public class OSCTransmitter {
 
     public void clearCmd() {
         sendShort("/key/clear_cmdline"); // TODO may have issues
+    }
+
+    public void sendBlackoutToggle() {
+        sendShort("/key/blackout");
     }
 }

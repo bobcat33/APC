@@ -44,7 +44,7 @@ public class APCReceiver implements Receiver {
         synchronized (listeners) {
             listenersCopy = new ArrayList<>(listeners);
         }
-        for (APCEventListener listener : listenersCopy) listener.onMessage(parentController, message);
+        for (APCEventListener listener : listenersCopy) if (listener.isActive()) listener.onMessage(parentController, message);
     }
 
     @Override

@@ -5,25 +5,36 @@ import com.github.bobcat33.apc.apcinterface.graphics.UIButtonBehaviour;
 import com.github.bobcat33.apc.apcinterface.graphics.Layout;
 import com.github.bobcat33.apc.apcinterface.message.Button;
 import com.github.bobcat33.apc.apcinterface.message.ButtonType;
+import com.github.bobcat33.apc.layouts.FileLayout;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 
 public class UserPage implements Layout {
     private final HashMap<Integer, Button> padMap; // Store button so that support for different LED behaviour will be available later
-    private final HashMap<Integer, UIButtonBehaviour> trackMap;
+    private final HashMap<Integer, UIButtonBehaviour> trackMap, sceneMap;
     private File file = null;
 
     public UserPage() {
         padMap = new HashMap<>();
         trackMap = new HashMap<>();
+        sceneMap = new HashMap<>();
     }
 
     public UserPage(File file) {
         this();
         this.file = file;
-        // TODO Load from file
+        try {
+            padMap.putAll(FileLayout.loadPadDataFromFile(file));
+            trackMap.putAll(FileLayout.loadTrackButtonBehaviourFromFile(file));
+            sceneMap.putAll(FileLayout.loadSceneButtonBehaviourFromFile(file));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void storeButton(Button button) {
@@ -42,7 +53,7 @@ public class UserPage implements Layout {
 
         // If TRACK selected
         if (button.getButtonType().equals(ButtonType.TRACK))
-            return new Button(0x90, ButtonType.TRACK, pos, Objects.requireNonNullElse(trackMap.get(pos).ordinal(), 0));
+            return new Button(0x90, ButtonType.TRACK, pos, trackMap.get(pos).ordinal());
         return null;
     }
 
@@ -52,9 +63,13 @@ public class UserPage implements Layout {
     }
 
     public void storeToFile() {
-        // TODO Possibly store to default files even if loaded from different file (store to both) so that desk starts from where left off when restarted?
         if (file == null) return; // TODO Store to default file
-        // TODO Store to loaded file
+
+        try {
+            FileLayout.storeToFile(file, padMap, trackMap, sceneMap);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

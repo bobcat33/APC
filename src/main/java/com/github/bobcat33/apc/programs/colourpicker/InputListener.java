@@ -200,11 +200,24 @@ public class InputListener extends APCButtonFaderEventListener {
 
     @Override
     public void onButtonUp(APCController controller, Button button) {}
+
     @Override
     public void onClose() {
         for (UserPage page : userPages) {
-            page.storeToFile(); // TODO finish + test
+            page.storeToFile();
         }
     }
 
+    @Override
+    public void setActive(APCController controller, boolean active) {
+        super.setActive(controller, active);
+
+        if (active) {
+            new StartUpLayout().go(controller);
+        } else {
+            for (UserPage page : userPages) {
+                page.storeToFile();
+            }
+        }
+    }
 }

@@ -5,7 +5,7 @@ import com.github.bobcat33.apc.apcinterface.message.Button;
 import com.github.bobcat33.apc.apcinterface.message.Fader;
 import com.github.bobcat33.apc.apcinterface.message.Message;
 
-public abstract class APCButtonFaderEventListener implements APCEventListener {
+public abstract class APCButtonFaderEventListener extends APCEventListener {
 
     public abstract void onButtonDown(APCController controller, Button button);
     public abstract void onButtonUp(APCController controller, Button button);
