@@ -215,6 +215,8 @@ public class InputListener extends APCButtonFaderEventListener {
         if (active) {
             new StartUpLayout().go(controller);
         } else {
+            copyMode = false;
+            currentScene = Scene.COLOURS_1;
             for (UserPage page : userPages) {
                 page.storeToFile();
             }
